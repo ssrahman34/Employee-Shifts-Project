@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.timezone import utc, make_aware, get_default_timezone
 import datetime
 
-from shifts_app.shift_group import ShiftGroup
+#from shifts_app.shift_group import ShiftGroup
 
 class ShiftManager(models.Manager):
 
