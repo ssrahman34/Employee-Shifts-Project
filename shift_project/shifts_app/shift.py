@@ -13,7 +13,9 @@ class ShiftManager(models.Manager):
 
 
     def get_shifts_in_datetime_range(self, start_datetime, end_datetime):
-        pass
+        #if (self.start_datetime >= start_datetime && self.end_datetime <= end_datetime):
+          #return self
+          pass
 
 class Shift(models.Model):
 
@@ -24,6 +26,8 @@ class Shift(models.Model):
 
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
+    def __str__(self):
+        return self
 
     class Meta:
         app_label = "shifts_app"
