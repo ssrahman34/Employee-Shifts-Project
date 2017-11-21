@@ -27,7 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+import sys
+print(sys.version)
+print(sys.path)
 # Application definition
 
 INSTALLED_APPS = (
@@ -38,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shifts_app',
+    #'django_filter'
     #'shifts_app.apps.ShiftConfig',
 )
 
