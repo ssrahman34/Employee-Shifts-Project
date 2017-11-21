@@ -117,19 +117,27 @@ def week(request):
     firstHalf = []
     secHalf = []
     weekend = []
-
+    test1 = []
+    test2 = []
     weekend += Shift.objects.filter(start_datetime__week_day=0) #saturday
     weekend += Shift.objects.filter(start_datetime__week_day=1) #sunday
 
     firstHalf += Shift.objects.filter(start_datetime__week_day=2) #All Monday
     firstHalf += Shift.objects.filter(start_datetime__week_day=3) #All Tuesday
     firstHalf += Shift.objects.filter(start_datetime__week_day=4)#,timestamp__hour__lt=12) #Wednesday until 12:00
-    test1 = Shift.objects.filter(start_datetime__week_day=4).filter(start_datetime__hour = 11)
-    test2 = Shift.objects.filter(start_datetime__week_day=4).filter(hour = 9)
+    #test1 = Shift.objects.filter(start_datetime__week_day=4).filter(start_datetime__hour = 11)
+    wed = Shift.objects.filter(start_datetime__week_day=4)
+    for each in wed:
+        start = each.start_datetime.strftime("%-H")
+        if start < 12:
+            test1.append(each)
+        else:
+            test2.append(each) # if it is past 12
+            
     #secondHalf += Shift.objects.filter(start_datetime__week_day=4,timestamp__hour__gte=12) #Wed after 12
-   # for each in test:
-    #    if each.hour == 12
-        
+
+
+    secHalf +=  Shift.objects.filter(start_datetime__week_day=5) #All Thursday   
     secHalf += Shift.objects.filter(start_datetime__week_day=5) #All Thursday
     secHalf += Shift.objects.filter(start_datetime__week_day=6) #All Friday
 
