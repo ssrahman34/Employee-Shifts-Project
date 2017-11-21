@@ -1,0 +1,9 @@
+{% if shiftObjects %}
+<ul>
+    {% for shift in shiftObjects %}
+    <li><a href = "/display/">Shift</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No shifts are available.</p>
+{% endif %}

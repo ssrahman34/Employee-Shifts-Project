@@ -34,4 +34,18 @@ def display(request):
         result+=final
         endResult += final
     return HttpResponse(result)
-    #return render(request, 'shifts_app/detail.html')
+
+def shifts_display(request):
+    template = loader.get_template('shifts_app/shifts_display.html')
+    index = 0
+    shiftObjects = Shift.objects.all()
+    result = ""
+    context = {
+        'shiftObjects': shiftObjects,
+    }
+    for s in Shift.objects.all():
+        index = index+1
+        string= "Shift"+" "+str(index)+"<br>"
+        result +=string
+    return render(request, 'shifts_app/shifts_display.html',context)
+    #call display first and then create a URL using that and put that url into the urls.py
