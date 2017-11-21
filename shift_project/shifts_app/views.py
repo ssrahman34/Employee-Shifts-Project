@@ -12,7 +12,7 @@ def shift(request):
  #Create your views here.
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return HttpResponse("Hello. You're at the shift index.")
 
 def display(request):
     template = loader.get_template('shifts_app/detail.html')
@@ -51,7 +51,6 @@ def shifts_display(request):
     result = ""
     context = {
         'shiftObjects': shiftObjects,
-        #'Jan': Shift.objects.filter(date__range=["2011-01-01", "2011-01-31"])
     }
     for s in Shift.objects.all():
         index = index+1
@@ -125,8 +124,12 @@ def week(request):
     firstHalf += Shift.objects.filter(start_datetime__week_day=2) #All Monday
     firstHalf += Shift.objects.filter(start_datetime__week_day=3) #All Tuesday
     firstHalf += Shift.objects.filter(start_datetime__week_day=4)#,timestamp__hour__lt=12) #Wednesday until 12:00
-    #test = Shift.objects.filter(start_datetime__time__hour__gte=12)
+    test1 = Shift.objects.filter(start_datetime__week_day=4).filter(start_datetime__hour = 11)
+    test2 = Shift.objects.filter(start_datetime__week_day=4).filter(hour = 9)
     #secondHalf += Shift.objects.filter(start_datetime__week_day=4,timestamp__hour__gte=12) #Wed after 12
+   # for each in test:
+    #    if each.hour == 12
+        
     secHalf += Shift.objects.filter(start_datetime__week_day=5) #All Thursday
     secHalf += Shift.objects.filter(start_datetime__week_day=6) #All Friday
 
@@ -134,6 +137,8 @@ def week(request):
         'firstHalf': firstHalf,
         'secHalf' : secHalf,
         'weekend' : weekend,
+        'test1' : test1,
+        'test2' :test2
  
     }
     return render(request, 'shifts_app/week.html',context)

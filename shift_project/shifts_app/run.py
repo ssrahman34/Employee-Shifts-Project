@@ -2,6 +2,12 @@ from django.db import models
 
 #from shifts_app.shift import Shift
 
+class RunManager(models.Manager):
+    def create_run(self, user_id, start_datetime, end_datetime):
+        run = Run(user_id = user_id, start_datetime= start_datetime, end_datetime= end_datetime) #assign to given parameters
+        
+        run.save()
+
 
 class Run(models.Model):
 
