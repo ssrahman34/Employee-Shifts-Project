@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from shifts_app import Shift
 from shifts_app import Run
+#from shifts_app.shift_group import ShiftGroup
 from django.utils import timezone
 import datetime
 
@@ -31,16 +32,13 @@ def display(request):
         string= "Shift"+" "+str(index)+"<br>"
         sid = str(s.id)
         temp = ""
-        #ListID += s.id
+
         start = s.start_datetime.strftime("%B %d, %Y")
         end = s.end_datetime.strftime("%B %d, %Y")
-        #lst2 = [item[1] for item in s.run_times_list]
-        final = string+" "+"ID:"+sid + " " + "Start:"+start+" "+"End:"+end + " " +"RunID: ["+ str(s.id) + "]" +"<br>" 
+        #issue!! Cannot iterate through runs_related list. cannot access individual run using it!
+        final = string+" "+"ID:"+sid + " " + "Start:"+start+" "+"End:"+end + " " +"<br>" +"Runs: ["+str(s.runs_related)+"]" + "<br>" + "<br>"
         result+=final
-        for r in s.run_times_list:
-            #temp = "[run" + str(r.user_id) + "]"+ "<br>"
-            result += temp
-        #result += "<br>"  
+
         endResult += final
     return HttpResponse(result)
 
@@ -107,6 +105,26 @@ def group(request):
         'Nov': Nov,
         'Dec': Dec,
     }
+    """    template = loader.get_template('shifts_app/group.html')
+    shiftGroup = ShiftGroup()
+    shiftGroup.calculate()
+
+
+    context = {
+        'Jan': shiftGroup.Jan,
+        'Feb': shiftGroup.Feb,
+        'Mar': shiftGroup.Mar,
+        'Apr': shiftGroup.Apr,
+        'May': shiftGroup.May,
+        'Jun': shiftGroup.Jun,
+        'Jul': shiftGroup.Jul,
+        'Aug': shiftGroup.Aug,
+        'Sep': shiftGroup.Sep,
+        'Oct': shiftGroup.Oct,
+        'Nov': shiftGroup.Nov,
+        'Dec': shiftGroup.Dec,
+    }
+"""
 
     return render(request, 'shifts_app/group.html',context)
 

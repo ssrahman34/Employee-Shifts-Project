@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 from django.utils.timezone import utc, make_aware, get_default_timezone
 import datetime
 from shifts_app.run import Run
@@ -11,14 +12,28 @@ from shifts_app.run import Run
 class ShiftManager(models.Manager):
 
     def create_shift(self, start_datetime, end_datetime, run_times_list):
-        #shift=self.create(start_datetime = start_datetime, end_datetime = end_datetime)
-        #for run in run_times_list:
-            #print(run.start_datetime)
-            
-        shift = Shift(start_datetime= start_datetime, end_datetime= end_datetime, run_times_list= run_times_list) #assign to given parameters
-        shift.run_times_list = run_times_list #now shift has its own run_times_list
+
+    #run_times_list have data for each run -> a list of lists            
+        shift = Shift(start_datetime= start_datetime, end_datetime= end_datetime) #assign to given parameters
         shift.save()
-        #return shift
+        for eachList in run_times_list:
+            i = 0
+            s = 0
+            e = 0
+            for elem in eachList:
+                if(i == 0):
+                    user_id=elem
+                    i = 1
+                    continue
+                if (s == 0):
+                    start_datetime=elem
+                    s = 1
+                    continue
+                if (e == 0):
+                    end_datetime = elem
+                    e = 1
+                Run.create(user_id, start_datetime, end_datetime, shift)
+                print(user_id, start_datetime, end_datetime)
 
     def get_shifts_in_datetime_range(self, start_datetime, end_datetime):
         if (self.start_datetime >= start_datetime and self.end_datetime <= end_datetime):
@@ -33,9 +48,6 @@ class Shift(models.Model):
 
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
-    run_times_list = []
-    obj = Run()
-    run_times_list=[obj]
     def __str__(self):
         return self
 
