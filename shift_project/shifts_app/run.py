@@ -19,6 +19,7 @@ class Run(models.Model):
 
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
+    covered = models.BooleanField(default=True)
     @classmethod
     def create(cls, user_id, start_datetime, end_datetime, shift):
         run = cls(user_id=user_id, start_datetime=start_datetime, end_datetime=end_datetime, shift=shift)
