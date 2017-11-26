@@ -32,7 +32,8 @@ class ShiftManager(models.Manager):
                 if (e == 0):
                     end_datetime = elem
                     e = 1
-                Run.create(user_id, start_datetime, end_datetime, shift)
+                r = Run.create(user_id, start_datetime, end_datetime, shift)
+                r.save() #saveRun
                 print(user_id, start_datetime, end_datetime)
 
     def get_shifts_in_datetime_range(self, start_datetime, end_datetime):
@@ -48,8 +49,11 @@ class Shift(models.Model):
 
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
+
+    def get_absolute_url(self):
+        return reverse('shift:detail',kwargs = {'pk': self.pk})#When we create a new Shift it will add to database and give it some PK and take it to the view with whatever #the pK is
     def __str__(self):
-        return self
+        return str(self.id) +'-'+ str(self.start_datetime) + '-' +str(self.end_datetime)
 
     class Meta:
         app_label = "shifts_app"

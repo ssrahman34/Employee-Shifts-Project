@@ -1,0 +1,10 @@
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+{% for field in form %}
+    <div class = "form-group">
+        <div class = "col-sm-offset -2 col-sm-10">
+            <span class = "text-danger small"> {{ field.errors }}</span>
+        </div>
+        <label class = "control-label col-sm-3">{{ field.label_tag}}</label>
+        <div class = "col-sm-10">{{ field }}</div>
+    </div>
+{% endfor %}

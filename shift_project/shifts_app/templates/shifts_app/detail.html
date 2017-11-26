@@ -1,12 +1,12 @@
-<h1>Current Shifts</h1>
+
+{% block title %} Shift Details {% endblock %}
+
+
+    <h4>SHIFT START: {{shift.start_datetime}}</h4>
+    <h4>SHIFT END: {{shift.end_datetime}}</h4>
+    {% for run in shift.runs_related.all %}
+        <h5>User_ID: {{run.user_id}} Start: {{run.start_datetime}} End: {{run.end_datetime}}</h5>
+    {% endfor %}
 
 
 
-
-{{final}}
-<shifts_app class="shifts_app">
-    {% for id in ListID%}
-    {{id}}
-</shifts_app>
-{% endfor %}
-<br/>

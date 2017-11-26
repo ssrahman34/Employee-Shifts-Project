@@ -4,4 +4,3 @@ import datetime
 
 class ShiftConfig(AppConfig):
     name = 'Shift'
-    verbose_name = "Shift"

@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
+from django.core.urlresolvers import reverse_lazy
+from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from shifts_app import Shift
 from shifts_app import Run
 #from shifts_app.shift_group import ShiftGroup
@@ -168,3 +171,29 @@ def week(request):
  
     }
     return render(request, 'shifts_app/week.html',context)
+
+class IndexView(generic.ListView):
+    template_name = 'shifts_app/index.html'
+
+    def get_queryset(self):
+        return Shift.objects.all()
+
+class DetailView(generic.DetailView):
+    model = Shift
+    template_name = 'shifts_app/detail.html'
+
+
+class ShiftCreate(CreateView):
+    model = Shift 
+    #what attributes do you  want user to specify?
+    fields = ['start_datetime', 'end_datetime'] #only 2
+
+class ShiftUpdate(UpdateView):
+    model = Shift 
+    #what attributes do you  want user to specify?
+    fields = ['start_datetime', 'end_datetime'] #only 2
+
+class ShiftDelete(DeleteView):
+    model = Shift
+    #when you successfuly delete a shift
+    success_url = reverse_lazy('shift:index')

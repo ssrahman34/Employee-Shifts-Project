@@ -40,8 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shifts_app',
-    #'django_filter'
-    #'shifts_app.apps.ShiftConfig',
+    #'shifts_app.apps.ShiftConfig', do not need for V1.8
 )
 
 MIDDLEWARE_CLASSES = (

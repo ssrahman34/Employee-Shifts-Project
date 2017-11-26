@@ -1,0 +1,51 @@
+
+<h3>Group 1:</h3>
+<h4>Monday, Tuesday, Wednesday until 12pm</h4>
+{% if firstHalf %}
+<ul>
+    {% for shift in firstHalf %}
+    <li>Shift# {{shift.id}}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No shifts are available.</p>
+{% endif %}
+
+
+
+<h3>Group 2:</h3>
+<h4>Wednesday 12pm+, Thursday, Friday</h4>
+{% if secHalf %}
+<ul>
+    {% for shift in secHalf %}
+    <li>Shift# {{shift.id}}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No shifts are available.</p>
+{% endif %}
+
+
+<h3>Group 3:</h3>
+<h4>Saturday, Sunday</h4>
+
+{% if weekend %}
+<ul>
+    {% for shift in weekend %}
+    <li>Shift# {{shift.id}}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Weekend shifts are available.</p>
+{% endif %}
+
+
+<h3>Test1</h3>
+{% for shift in test1 %}
+<li>Shift# {{shift.id}}</li>
+{% endfor %}
+
+<h3>Test2</h3>
+{% for shift in test2 %}
+<li>Shift# {{shift.id}}</li>
+{% endfor %}
