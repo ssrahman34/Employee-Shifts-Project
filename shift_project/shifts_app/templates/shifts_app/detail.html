@@ -11,7 +11,7 @@
 <h4>SHIFT-NUMBER:  {{shift.id}}</h4>
 <h4>SHIFT-START:  {{shift.start_datetime}}</h4>
 <h4>SHIFT-END:  {{shift.end_datetime}}</h4>
-<form action = "{% url 'shift:covered' shift.id%}" method = "post">
+<form action = "{% url 'shift:covered' shift.id%}">
         {% csrf_token %}
     {% for run in shift.runs_related.all %}
 <h5>RUN-INFO: User_id:  {{run.user_id}} Start:  {{run.start_datetime}} End:  {{run.end_datetime}}</h5>
