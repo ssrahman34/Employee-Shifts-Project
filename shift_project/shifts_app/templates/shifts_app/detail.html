@@ -11,7 +11,14 @@
 <h4>SHIFT-NUMBER:  {{shift.id}}</h4>
 <h4>SHIFT-START:  {{shift.start_datetime}}</h4>
 <h4>SHIFT-END:  {{shift.end_datetime}}</h4>
-<form action = "{% url 'shift:covered' shift.id%}">
+<h5>Would you like to create a run?</h5>
+<ul class="nav nav-pills" style="margin-bottom: 10px;">
+      
+        <label role="presentation" class="active">
+            <a href = "{% url 'shift:run-add' shift.id %}" class="active">Add New Run</a>
+        </label>
+    </ul>
+<form action = "{% url 'shift:covered'  shift.id%}" method = "post">
         {% csrf_token %}
     {% for run in shift.runs_related.all %}
 <h5>RUN-INFO: User_id:  {{run.user_id}} Start:  {{run.start_datetime}} End:  {{run.end_datetime}}</h5>

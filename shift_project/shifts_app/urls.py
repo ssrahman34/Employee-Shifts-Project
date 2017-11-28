@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$',views.DetailView.as_view(), name = 'detail'),
     #shift/shift/add/
     url(r'shift/add/$', views.ShiftCreate.as_view(), name = 'shift-add'),
+    url(r'run/add/(?P<pk>[0-9]+)$', views.RunCreate.as_view(), name = 'run-add'),
     #shift/update/2
     url(r'shift/(?P<pk>[0-9]+)$', views.ShiftUpdate.as_view(), name = 'shift-update'),
     #shift/delete/2

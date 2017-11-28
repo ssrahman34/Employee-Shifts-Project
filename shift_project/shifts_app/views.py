@@ -188,6 +188,14 @@ class ShiftCreate(CreateView):
     #what attributes do you  want user to specify?
     fields = ['start_datetime', 'end_datetime'] #only 2
 
+class RunCreate(CreateView):
+    model = Run
+    #what attributes do you  want user to specify?
+    fields = ['user_id','start_datetime', 'end_datetime'] #only 2
+    
+    success_url = reverse_lazy('shift:index')
+
+
 class ShiftUpdate(UpdateView):
     model = Shift 
     #what attributes do you  want user to specify?
@@ -201,14 +209,14 @@ class ShiftDelete(DeleteView):
 def covered(shift_id):
     shift = get_object_or_404(Shift, pk=shift_id)
     #make sure this is a valid run id
-    """ try:
+    try:
         selected_run = shift.runs_related.all.get(pk=request.POST['run'])
     except(KeyError, Run.DoesNotExist):
         return render(request, 'shifts_app/detail.html',{
             'shift': shift,
             'error_message': "You did not select a valid run",
         }) 
-    else:"""
-    selected_run.is_covered = True
-    selected_run.save()
-    return render(request, 'shifts_app/detail.html', {'shift': shift})
+    else:
+        selected_run.is_covered = True
+        selected_run.save()
+        return render(request, 'shifts_app/detail.html', {'shift': shift})
