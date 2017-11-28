@@ -22,11 +22,11 @@
         {% csrf_token %}
     {% for run in shift.runs_related.all %}
 <h5>RUN-INFO: User_id:  {{run.user_id}} Start:  {{run.start_datetime}} End:  {{run.end_datetime}}</h5>
-<input type = "radio" id="run{{ forloop.counter }}" name="therun" value="{{ run.id }}">
+<input type = "radio" id="run{{ forloop.counter }}" name="run" value="{{ run.id }}">
     <label for="run{{ forloop.counter}}">
         Needs a Cover!
         <label role="presentation" class="active">
-                <a href ="{% url 'shift:covered'  shift.id%}" method = "post">Needs Cover</form>
+                <a href ="{% url 'shift:covered'  run.id%}" method = "post">Needs Cover</form>
             <span class="glyphicon glyphicon-star">
                 {% if run.is_covered %}
                 Covered 

@@ -228,14 +228,14 @@ class ShiftDelete(DeleteView):
     #when you successfuly delete a shift
     success_url = reverse_lazy('shift:index')
 
-def covered(request,shift_id):
-    shift = get_object_or_404(Shift, pk=shift_id)
-    selected_run = shift.runs_related.all().filter(user_id = 'therun'.user_id, start_datetime='therun'.start_datetime, end_datetime='therun'.end_datetime)
-    #selected_run= shift.
+def covered(request,run_id):
+    #shift = get_object_or_404(Shift, pk=shift_id)
+    selected_run = get_object_or_404(Run, pk=run_id)
     selected_run.is_covered = False
     selected_run.save()
-    shift.save()
-    return render(request, 'shifts_app/detail.html', {'shift': shift})
+    #return render(request, 'shifts_app/detail.html')
+    success_url = reverse_lazy('shift:index')
+    return success_url
     #make sure this is a valid run id
     """ try:
         selected_run = shift.runs_related.all().get(pk=request.POST['run'])

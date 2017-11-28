@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^details/group$', views.group, name='group'),
     url(r'^details/week$', views.week, name='group'),
     url(r'^index$',views.IndexView.as_view() ,name = 'index'),
-    url(r'^covered/(?P<shift_id>[0-9]+)/$',views.covered, name = 'covered'),
+    url(r'^covered/(?P<run_id>[0-9]+)/$',views.covered, name = 'covered'),
     url(r'^(?P<pk>[0-9]+)/$',views.DetailView.as_view(), name = 'detail'),
     #shift/shift/add/
     url(r'shift/add/$', views.ShiftCreate.as_view(), name = 'shift-add'),
