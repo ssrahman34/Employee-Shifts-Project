@@ -15,7 +15,7 @@
 <ul class="nav nav-pills" style="margin-bottom: 10px;">
       
         <label role="presentation" class="active">
-            <a href = "{% url 'shift:run-add' shift.id %}" class="active">Add New Run</a>
+            <a href = "{% url 'shift:create_run' shift.id %}" class="active">Add New Run</a>
         </label>
     </ul>
 <form action = "{% url 'shift:covered'  shift.id%}" method = "post">
@@ -25,6 +25,9 @@
 <input type = "radio" id="run{{ forloop.counter }}" name="run" value="{{ run.id }}">
     <label for="run{{ forloop.counter}}">
         Needs a Cover!
+        <label role="presentation" class="active">
+                <span class="glyphicon glyphicon-star {% if run.is_covered %}active{% endif %}"></span>
+            </label>
         {% if run.is_covered %}
             <img src="http://i.imgur.com/b9b13Rd.png" />
         {% endif %}

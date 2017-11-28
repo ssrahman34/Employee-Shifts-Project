@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from django.core.urlresolvers import reverse_lazy
@@ -6,6 +6,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from shifts_app import Shift
 from shifts_app import Run
+from.forms import RunForm
 #from shifts_app.shift_group import ShiftGroup
 from django.utils import timezone
 import datetime
@@ -188,13 +189,34 @@ class ShiftCreate(CreateView):
     #what attributes do you  want user to specify?
     fields = ['start_datetime', 'end_datetime'] #only 2
 
-class RunCreate(CreateView):
-    model = Run
+#class RunCreate(CreateView):
+ #   model = Run
     #what attributes do you  want user to specify?
-    fields = ['user_id','start_datetime', 'end_datetime'] #only 2
+  #  fields = ['user_id','start_datetime', 'end_datetime'] #only 2
     
-    success_url = reverse_lazy('shift:index')
-
+   # success_url = reverse_lazy('shift:index')
+def create_run(request, shift_id):
+    form = RunForm(request.POST or None, request.FILES or None)
+    shift = get_object_or_404(Shift, pk=shift_id)
+    if form.is_valid():
+        shift_runs = shift.runs_related.all()
+        for s in shift_runs:
+            if s.user_id == form.cleaned_data.get("user_id"):
+                context = {
+                    'user_id': user_id,
+                    'form': form,
+                    'error_message': 'You already added that song',
+                }
+                return render(request, 'shifts_app/run_form.html', context)
+        run = form.save(commit=False)
+        run.shift = shift
+        run.save()
+        return render(request, 'shifts_app/detail.html', {'shift': shift})
+    context = {
+        'shift': shift,
+        'form': form,
+    }
+    return render(request, 'shifts_app/run_form.html', context)
 
 class ShiftUpdate(UpdateView):
     model = Shift 
@@ -206,17 +228,23 @@ class ShiftDelete(DeleteView):
     #when you successfuly delete a shift
     success_url = reverse_lazy('shift:index')
 
-def covered(shift_id):
+def covered(request,shift_id):
     shift = get_object_or_404(Shift, pk=shift_id)
+    selected_run = shift.runs_related.all().get(pk=request.POST['run'])
+    selected_run.is_covered = False
+    selected_run.save()
+    shift.save()
+    return render(request, 'shifts_app/detail.html', {'shift': shift})
     #make sure this is a valid run id
-    try:
-        selected_run = shift.runs_related.all.get(pk=request.POST['run'])
+    """ try:
+        selected_run = shift.runs_related.all().get(pk=request.POST['run'])
     except(KeyError, Run.DoesNotExist):
         return render(request, 'shifts_app/detail.html',{
             'shift': shift,
             'error_message': "You did not select a valid run",
         }) 
     else:
-        selected_run.is_covered = True
+        selected_run.is_covered = False
         selected_run.save()
         return render(request, 'shifts_app/detail.html', {'shift': shift})
+    """

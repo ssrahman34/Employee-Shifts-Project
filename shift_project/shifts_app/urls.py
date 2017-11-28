@@ -9,11 +9,12 @@ urlpatterns = [
     url(r'^details/group$', views.group, name='group'),
     url(r'^details/week$', views.week, name='group'),
     url(r'^index$',views.IndexView.as_view() ,name = 'index'),
-    url(r'^covered/(?P<pk>[0-9]+)/$',views.covered, name = 'covered'),
+    url(r'^covered/(?P<shift_id>[0-9]+)/$',views.covered, name = 'covered'),
     url(r'^(?P<pk>[0-9]+)/$',views.DetailView.as_view(), name = 'detail'),
     #shift/shift/add/
     url(r'shift/add/$', views.ShiftCreate.as_view(), name = 'shift-add'),
-    url(r'run/add/(?P<pk>[0-9]+)$', views.RunCreate.as_view(), name = 'run-add'),
+    #url(r'run/add/(?P<pk>[0-9]+)$', views.RunCreate.as_view(), name = 'run-add'),
+    url(r'^(?P<shift_id>[0-9]+)/create_run/$', views.create_run, name='create_run'),
     #shift/update/2
     url(r'shift/(?P<pk>[0-9]+)$', views.ShiftUpdate.as_view(), name = 'shift-update'),
     #shift/delete/2
