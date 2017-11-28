@@ -18,15 +18,21 @@
             <a href = "{% url 'shift:create_run' shift.id %}" class="active">Add New Run</a>
         </label>
     </ul>
-<form action = "{% url 'shift:covered'  shift.id%}" method = "post">
+
         {% csrf_token %}
     {% for run in shift.runs_related.all %}
 <h5>RUN-INFO: User_id:  {{run.user_id}} Start:  {{run.start_datetime}} End:  {{run.end_datetime}}</h5>
-<input type = "radio" id="run{{ forloop.counter }}" name="run" value="{{ run.id }}">
+<input type = "radio" id="run{{ forloop.counter }}" name="therun" value="{{ run.id }}">
     <label for="run{{ forloop.counter}}">
         Needs a Cover!
         <label role="presentation" class="active">
-                <span class="glyphicon glyphicon-star {% if run.is_covered %}active{% endif %}"></span>
+                <a href ="{% url 'shift:covered'  shift.id%}" method = "post">Needs Cover</form>
+            <span class="glyphicon glyphicon-star">
+                {% if run.is_covered %}
+                Covered 
+                {%else%} 
+                Not Covered
+                {% endif %}</span>
             </label>
         {% if run.is_covered %}
             <img src="http://i.imgur.com/b9b13Rd.png" />

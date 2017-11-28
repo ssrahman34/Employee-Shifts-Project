@@ -230,7 +230,8 @@ class ShiftDelete(DeleteView):
 
 def covered(request,shift_id):
     shift = get_object_or_404(Shift, pk=shift_id)
-    selected_run = shift.runs_related.all().get(pk=request.POST['run'])
+    selected_run = shift.runs_related.all().filter(user_id = 'therun'.user_id, start_datetime='therun'.start_datetime, end_datetime='therun'.end_datetime)
+    #selected_run= shift.
     selected_run.is_covered = False
     selected_run.save()
     shift.save()
