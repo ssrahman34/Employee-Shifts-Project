@@ -249,9 +249,24 @@ def covered(request,shift_id):
         return render(request, 'shifts_app/detail.html', {'shift': shift})
 def user(request):
     ids = []
-    #or s in Shift.objects.all():
-    for run in shift.runs_related.all():
-        ids+= run.user_id
+    made_it = ""
+    form = RunForm(request.POST or None, request.FILES or None)
+    #if form.is_valid():
+
+    for shift in Shift.objects.all():
+        shift_runs = shift.runs_related.all()
+        for s in shift_runs:
+            if s.user_id in ids:
+                continue
+            else :
+                ids.append(s.user_id)
     context= {
-        'runIDS':ids}
+        'ids':ids,
+        'made_it':made_it,
+        'form': form,
+        }
     return render(request, 'shifts_app/users.html', context)
+
+class DetailView(generic.DetailView):
+    model = Run
+    template_name = 'shifts_app/run_detail.html'
