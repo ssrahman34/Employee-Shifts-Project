@@ -267,6 +267,21 @@ def user(request):
         }
     return render(request, 'shifts_app/users.html', context)
 
-class DetailView(generic.DetailView):
-    model = Run
+def Userview(request, usr_id):
     template_name = 'shifts_app/run_detail.html'
+    result = ""
+    check = usr_id
+    for shift in Shift.objects.all():
+        shift_runs = shift.runs_related.all() #get all shifts
+        for run in shift_runs:
+            check = "runs user ID" +str(run.user_id)
+            check2 = "INPUT ID" + str(usr_id)
+            if str(run.user_id) == usr_id:
+                check = "YES checkied"
+                result += "For User #" + usr_id + " | Shift Id: "+ str(shift.id)+ " | Run Id:" + str(run.id)+ "   |   Run's Start Date : " + str(run.start_datetime.date()) + " | Run's Start Time : " + str(run.start_datetime.time()) + "   |   Run's End Date : " + str(run.end_datetime.date()) + " | Run's End Time : " + str(run.end_datetime.time())
+    context= {
+        'result':result,
+        'check':check,
+        'check2':check2,
+    }
+    return render(request, 'shifts_app/run_detail.html', context)
