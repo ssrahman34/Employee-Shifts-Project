@@ -285,3 +285,4 @@ def Userview(request, usr_id):
         'check2':check2,
     }
     return render(request, 'shifts_app/run_detail.html', context)
+

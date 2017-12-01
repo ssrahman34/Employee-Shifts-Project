@@ -23,10 +23,10 @@
     {% for run in shift.runs_related.all %}
   
 <h5>RUN-INFO: User_id:  {{run.user_id}} Start:  {{run.start_datetime}} End:  {{run.end_datetime}}</h5>
-<input type = "radio" id="run{{ forloop.counter }}" name="run" value="{{ run.id }}"/>
+<input type = "text" id="run{{ forloop.counter }}" name="run" value="{{ run.user_id }}"/>
 <label for="run{{ forloop.counter }}">
-{{run.id}}
-{% if sun.is_covered %}
+Change Run Responsibility
+{% if run.is_covered %}
 <img src = "http://i.imugur.com/b9b13Rd.png" />
 {% endif %}
 
