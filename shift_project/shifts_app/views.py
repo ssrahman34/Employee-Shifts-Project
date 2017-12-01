@@ -109,7 +109,7 @@ def group(request):
         'Nov': Nov,
         'Dec': Dec,
     }
-    """    template = loader.get_template('shifts_app/group.html')
+    """template = loader.get_template('shifts_app/group.html')
     shiftGroup = ShiftGroup()
     shiftGroup.calculate()
 
@@ -127,9 +127,7 @@ def group(request):
         'Oct': shiftGroup.Oct,
         'Nov': shiftGroup.Nov,
         'Dec': shiftGroup.Dec,
-    }
-"""
-
+    }"""
     return render(request, 'shifts_app/group.html',context)
 
 
@@ -228,16 +226,17 @@ class ShiftDelete(DeleteView):
     #when you successfuly delete a shift
     success_url = reverse_lazy('shift:index')
 
-def covered(request,run_id):
-    #shift = get_object_or_404(Shift, pk=shift_id)
-    selected_run = get_object_or_404(Run, pk=run_id)
-    selected_run.is_covered = False
-    selected_run.save()
+def covered(request,shift_id):
+    shift = get_object_or_404(Shift, pk=shift_id)
+    print("entered coverage funciton")
+    #selected_run = get_object_or_404(Run, pk=run_id)
+    #selected_run.is_covered = False
+    #selected_run.save()
     #return render(request, 'shifts_app/detail.html')
-    success_url = reverse_lazy('shift:index')
-    return success_url
+    #success_url = reverse_lazy('shift:index')
+    #return success_url
     #make sure this is a valid run id
-    """ try:
+    try:
         selected_run = shift.runs_related.all().get(pk=request.POST['run'])
     except(KeyError, Run.DoesNotExist):
         return render(request, 'shifts_app/detail.html',{
@@ -245,7 +244,14 @@ def covered(request,run_id):
             'error_message': "You did not select a valid run",
         }) 
     else:
-        selected_run.is_covered = False
+        selected_run.is_covered = True
         selected_run.save()
         return render(request, 'shifts_app/detail.html', {'shift': shift})
-    """
+def user(request):
+    ids = []
+    #or s in Shift.objects.all():
+    for run in shift.runs_related.all():
+        ids+= run.user_id
+    context= {
+        'runIDS':ids}
+    return render(request, 'shifts_app/users.html', context)

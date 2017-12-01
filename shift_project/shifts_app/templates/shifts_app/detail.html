@@ -21,24 +21,17 @@
 
         {% csrf_token %}
     {% for run in shift.runs_related.all %}
+  
 <h5>RUN-INFO: User_id:  {{run.user_id}} Start:  {{run.start_datetime}} End:  {{run.end_datetime}}</h5>
-<input type = "radio" id="run{{ forloop.counter }}" name="run" value="{{ run.id }}">
-    <label for="run{{ forloop.counter}}">
-        Needs a Cover!
-        <label role="presentation" class="active">
-                <a href ="{% url 'shift:covered'  run.id%}" method = "post">Needs Cover</form>
-            <span class="glyphicon glyphicon-star">
-                {% if run.is_covered %}
-                Covered 
-                {%else%} 
-                Not Covered
-                {% endif %}</span>
-            </label>
-        {% if run.is_covered %}
-            <img src="http://i.imgur.com/b9b13Rd.png" />
-        {% endif %}
-    </label><br>
-    
+<input type = "radio" id="run{{ forloop.counter }}" name="run" value="{{ run.id }}"/>
+<label for="run{{ forloop.counter }}">
+{{run.id}}
+{% if sun.is_covered %}
+<img src = "http://i.imugur.com/b9b13Rd.png" />
+{% endif %}
+
+
+</label><br>
     {% endfor %}
     <input type="submit" value="Submit">
 </div>
