@@ -1,10 +1,16 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 {% for field in form %}
-    <div class = "form-group">
+    <div class = "form-group" style = "text-align: center"> 
         <div class = "col-sm-offset -2 col-sm-10">
             <span class = "text-danger small"> {{ field.errors }}</span>
         </div>
-        <label class = "control-label col-sm-3">{{ field.label_tag}}</label>
-        <div class = "col-sm-10">{{ field }}</div>
+        <br>
+        {% if field.type == datetime%}
+        Format Field: YYYY-MM-DD HH-MM
+        {% endif %}
+        <br>
+        <label class = "control-label col-sm-5" style = "left-margin: 300px;"> {{ field.label_tag}}</label>
+
+        <div class = "col-sm-7" style = "text-align: center"> {{ field }}</div>
     </div>
 {% endfor %}

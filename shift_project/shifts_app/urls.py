@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'shift/(?P<pk>[0-9]+)$', views.ShiftUpdate.as_view(), name = 'shift-update'),
     #shift/delete/2
     url(r'shift/(?P<pk>[0-9]+)/delete$',views.ShiftDelete.as_view(), name = 'shift-delete'),
+    #run/shift_id/user_id
+    url(r'run/(?P<shift_id>[0-9]+)/(?P<usr_id>[0-9]+)$',views.run_update, name = 'run-update'),
 
 ]
 

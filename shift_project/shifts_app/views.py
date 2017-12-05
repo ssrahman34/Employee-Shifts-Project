@@ -6,15 +6,14 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from shifts_app import Shift
 from shifts_app import Run
+
 from.forms import RunForm
-#from shifts_app.shift_group import ShiftGroup
+from shifts_app.shift_group import ShiftGroup, ShiftGroupManager
 from django.utils import timezone
 import datetime
 
 def shift(request):
    return render(request, 'shifts_app/shift.html')
-
- #Create your views here.
 
 def index(request):
     return HttpResponse("Hello. You're at the shift index.")
@@ -36,7 +35,6 @@ def display(request):
         string= "Shift"+" "+str(index)+"<br>"
         sid = str(s.id)
         temp = ""
-
         start = s.start_datetime.strftime("%B %d, %Y")
         end = s.end_datetime.strftime("%B %d, %Y")
         #issue!! Cannot iterate through runs_related list. cannot access individual run using it!
@@ -62,8 +60,7 @@ def shifts_display(request):
     #call display first and then create a URL using that and put that url into the urls.py
 
 def group(request):
-    template = loader.get_template('shifts_app/group.html')
-    index = 1
+    sgm = ShiftGroupManager()
     Jan= []
     Feb= []
     Mar= []
@@ -76,25 +73,7 @@ def group(request):
     Oct= []
     Nov= []
     Dec= []
-    while (index < 31):
-        Jan += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 1, index))
-        Mar += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 3, index))
-        Apr += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 4, index))
-        May += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 5, index))
-        Jun += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 6, index))
-        Jul += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 7, index))
-        Aug += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 8, index))
-        Sep += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 9, index))
-        Oct += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 10, index))
-        Nov += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 11, index))
-        Dec += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 12, index))
-        index+=1
-    index = 1
-    while (index < 29):
-        Feb += Shift.objects.filter(start_datetime__contains=datetime.date(2017, 2, index))
-        index+=1
-
-
+    Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec = sgm.getMonths(Shift.objects.all())
     context = {
         'Jan': Jan,
         'Feb': Feb,
@@ -109,25 +88,6 @@ def group(request):
         'Nov': Nov,
         'Dec': Dec,
     }
-    """template = loader.get_template('shifts_app/group.html')
-    shiftGroup = ShiftGroup()
-    shiftGroup.calculate()
-
-
-    context = {
-        'Jan': shiftGroup.Jan,
-        'Feb': shiftGroup.Feb,
-        'Mar': shiftGroup.Mar,
-        'Apr': shiftGroup.Apr,
-        'May': shiftGroup.May,
-        'Jun': shiftGroup.Jun,
-        'Jul': shiftGroup.Jul,
-        'Aug': shiftGroup.Aug,
-        'Sep': shiftGroup.Sep,
-        'Oct': shiftGroup.Oct,
-        'Nov': shiftGroup.Nov,
-        'Dec': shiftGroup.Dec,
-    }"""
     return render(request, 'shifts_app/group.html',context)
 
 
@@ -187,12 +147,6 @@ class ShiftCreate(CreateView):
     #what attributes do you  want user to specify?
     fields = ['start_datetime', 'end_datetime'] #only 2
 
-#class RunCreate(CreateView):
- #   model = Run
-    #what attributes do you  want user to specify?
-  #  fields = ['user_id','start_datetime', 'end_datetime'] #only 2
-    
-   # success_url = reverse_lazy('shift:index')
 def create_run(request, shift_id):
     form = RunForm(request.POST or None, request.FILES or None)
     shift = get_object_or_404(Shift, pk=shift_id)
@@ -203,6 +157,7 @@ def create_run(request, shift_id):
                 context = {
                     'user_id': user_id,
                     'form': form,
+                    'shift' : shift,
                     'error_message': 'You already added that song',
                 }
                 return render(request, 'shifts_app/run_form.html', context)
@@ -215,18 +170,56 @@ def create_run(request, shift_id):
         'form': form,
     }
     return render(request, 'shifts_app/run_form.html', context)
+def run_update(request, shift_id,usr_id):
+    #usr_id = request.GET['text_box']
+    print("usre_" + usr_id)
+    """for shift in Shift.objects.all():
+        shift_runs = shift.runs_related.all()
+        for s in shift_runs:
+            if str(s.user_id) == usr_id:
+                s.user_id = usr_id
+
+                s.shift = shift
+                s.save()
+            else :
+                continue
+    """
+    form = RunForm(request.POST or None, request.FILES or None)
+    shift = get_object_or_404(Shift, pk=shift_id)
+    
+    #print("usre_" + usr_id)
+    if form.is_valid():
+        shift_runs = shift.runs_related.all()
+        run = shift_runs.get(user_id=int(usr_id)) #get run with correct user_id
+        run.user_id=12 # reassign user ID
+        run = form.save(commit=False)
+        run.user_id=12 # reassign user ID
+        print("usre_hhh")
+        run.shift = shift
+        #shift.save()
+        run.save()
+        
+    context = {
+        
+        'shift':shift, 
+        
+        }
+    return render(request, 'shifts_app/detail.html', context) #go back to runs page
 
 class ShiftUpdate(UpdateView):
     model = Shift 
     #what attributes do you  want user to specify?
     fields = ['start_datetime', 'end_datetime'] #only 2
+    template_name_suffix = '_update_form'
+
 
 class ShiftDelete(DeleteView):
     model = Shift
     #when you successfuly delete a shift
     success_url = reverse_lazy('shift:index')
 
-def covered(request,shift_id):
+def covered(request,run_id, usr_id):
+    #we want to relapce run.user_id with usr_id
     shift = get_object_or_404(Shift, pk=shift_id)
     print("entered coverage funciton")
     #selected_run = get_object_or_404(Run, pk=run_id)

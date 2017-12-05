@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.utils.timezone import utc, make_aware, get_default_timezone
 import datetime
 from shifts_app.run import Run
-from shifts_app.shift_group import ShiftGroup
+from shifts_app.shift_group import ShiftGroup, ShiftGroupManager
 #https://docs.djangoproject.com/en/1.11/topics/db/queries/
 
 
@@ -48,10 +48,11 @@ class Shift(models.Model):
     db_table="shift"
     objects = ShiftManager()
 
+    shiftGroup = models.ForeignKey(ShiftGroup, null = True, blank= True, related_name="shifts_related", on_delete = models.CASCADE) 
+
     start_datetime = models.DateTimeField(default = timezone.now())
     end_datetime = models.DateTimeField(default = timezone.now())
     #shift.shiftGroup accesses the SHIFT GOUP
-    #shiftGroupJan = models.ForeignKey(ShiftGroup, null = True, blank= True, related_name="shifts_related", on_delete = models.CASCADE) 
  #make optional
 
     def get_absolute_url(self):
