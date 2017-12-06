@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<h2>Welcome to the Employee's Runs page</h2>
+{% if ids %}
+{% for ID in ids %}
+
+<li><a href = "{% url 'shift:userview' ID %}">User ID # {{ID}}</a></li>
+
+<br>
+{% endfor %}
+{% else %}
+<p>No ID's are available.</p>
+{% endif %}
+{{made_it}}

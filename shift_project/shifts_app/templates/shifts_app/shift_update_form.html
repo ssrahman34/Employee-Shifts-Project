@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<div class = "container-fluid">
+    <div class = "row">
+        <div class = "col-sm-12 col-md-7">
+            <div class = "panel panel-default">
+                <div class = "panel-body" style = "text-align: center"> 
+                    <h2> Update a Shift </h2>
+                    <form class = "form-horizontal" action = "" method = "post">
+                        {% csrf_token %}
+                        {% include 'shifts_app/form-template.html' %}
+                        <div class = "form-group">
+                            <div class = "col-sm-offset -2 col-sm-10">
+                                <button type = "submit" class = "btn btn-success" >Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
