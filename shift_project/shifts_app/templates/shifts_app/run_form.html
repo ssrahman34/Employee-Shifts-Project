@@ -7,6 +7,7 @@
                         <h5>SHIFT-START:  {{shift.start_datetime}}</h5>
                         <h5>SHIFT-END:  {{shift.end_datetime}}</h5>
                     <h2>Create a Run</h2>
+                    <h5 class = "text-danger medium">{{form.non_field_errors}}</h5>
                     <form class = "form-horizontal" action = "" method = "post">
                         {% csrf_token %}
                         {% include 'shifts_app/form-template.html' %}
