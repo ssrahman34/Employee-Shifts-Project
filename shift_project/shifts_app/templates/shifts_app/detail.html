@@ -23,17 +23,18 @@
     {% for run in shift.runs_related.all %}
   
 <h5>RUN-INFO: User_id:  {{run.user_id}} Start:  {{run.start_datetime}} End:  {{run.end_datetime}}</h5>
-<input type = "text_box" id="run{{ forloop.counter }}" name="RIT" value={{run.user_id}} method="post">
-<a href = "{% url 'shift:run-update' shift.id run.user_id %}">Click Here</a>
+
+<ul class="nav nav-pills" style="margin-bottom: 10px;">
+          <label role="presentation" class="active">
+              <a href = "{% url 'shift:edit_run' shift.id run.id%}" class="active">Edit Run</a>
+          </label>
+      </ul>
+<form id = "cover run" method = "POST">
+        {% csrf_token %}
+<input type = "text_box" id="RIT" name="RIT">
+<a href = "{% url 'shift:run-update' shift.id run.user_id %}">Change Run</a>
 </input>
-<label for="run{{ forloop.counter }}">
-To Change Run Responsibility
-{% if run.is_covered %}
-<img src = "http://i.imugur.com/b9b13Rd.png" />
-{% endif %}
-
-
-</label><br>
+<br>
     {% endfor %}
     
 </div>

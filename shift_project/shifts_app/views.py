@@ -170,6 +170,32 @@ def create_run(request, shift_id):
         'form': form,
     }
     return render(request, 'shifts_app/run_form.html', context)
+
+def edit_run(request, shift_id, run_id):
+    instance = get_object_or_404(Run, id = run_id)
+    form = RunForm(request.POST or None, instance=instance)
+    shift = get_object_or_404(Shift, pk=shift_id)
+    if form.is_valid():
+        shift_runs = shift.runs_related.all()
+        for s in shift_runs:
+            if s.id == form.cleaned_data.get("run.id"):
+                context = {
+                    'user_id': user_id,
+                    'form': form,
+                    'shift' : shift,
+                    'error_message': 'You already added that song',
+                }
+                return render(request, 'shifts_app/run_form.html', context)
+        run = form.save(commit=False)
+        run.shift = shift
+        run.save()
+        return render(request, 'shifts_app/detail.html', {'shift': shift})
+    context = {
+        'shift': shift,
+        'form': form,
+    }
+    return render(request, 'shifts_app/run_form.html', context)
+
 def run_update(request, shift_id,usr_id):
     #usr_id = request.GET['text_box']
     print("usre_" + usr_id)
@@ -184,9 +210,13 @@ def run_update(request, shift_id,usr_id):
             else :
                 continue
     """
-    form = RunForm(request.POST or None, request.FILES or None)
+    
+    #instance = get_object_or_404(Run, id = run_id)
+    #form = RunForm(request.POST or None, instance=instance)
     shift = get_object_or_404(Shift, pk=shift_id)
     
+    test = request.POST.get('RIT')
+    print(test)
     #print("usre_" + usr_id)
     if form.is_valid():
         shift_runs = shift.runs_related.all()

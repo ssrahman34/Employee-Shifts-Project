@@ -13,5 +13,7 @@ class RunForm(forms.ModelForm):
         if start_time and end_time:
             if end_time.time() < start_time.time():
                 raise forms.ValidationError("*Note: End time cannot be earlier than start time! Please try again.")
+            if end_time.date() < start_time.date():
+                raise forms.ValidationError("*Note: End time cannot be earlier than start time! Please try again.")
         return cleaned_data
         
