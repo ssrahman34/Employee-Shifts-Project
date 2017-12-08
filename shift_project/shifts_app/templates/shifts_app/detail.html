@@ -31,11 +31,12 @@
       </ul>
 <form id = "cover run" method = "POST">
         {% csrf_token %}
-<input type = "text_box" id="RIT" name="RIT">
-<!-- <a href = "{% url 'shift:run-update' shift.id run.user_id %}">Change Run</a> -->
-</input>
+<!-- <input type = "text_box" id="RIT" name="RIT"><a href = "{% url 'shift:run-update' shift.id run.user_id %}">Change Run</a> </input>-->
 <br>
     {% endfor %}
+    <a href="http://127.0.0.1:8000/shifts/main">Click Here to Navigate to the main page</a>
+    <br>
+    <a href="http://127.0.0.1:8000/shifts/index">Click Here to go Back to Shifts</a>
     
 </div>
 </div>

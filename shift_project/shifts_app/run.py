@@ -8,7 +8,7 @@ class Run(models.Model):
     db_table="run"
 
     shift = models.ForeignKey("Shift", null = True, blank= True, related_name="runs_related", on_delete = models.CASCADE) 
-    #history = models.OneToOneField("His", null = True, blank= True, related_name="history", on_delete = models.CASCADE)
+    history = models.OneToOneField("His", null = True, blank= True, default = His(), related_name="history", on_delete = models.CASCADE)
     user_id = models.IntegerField(default=0, blank=True)
      
     start_datetime = models.DateTimeField()

@@ -6,6 +6,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from shifts_app import Shift
 from shifts_app import Run
+from shifts_app.his import His
 
 from.forms import RunForm
 from shifts_app.shift_group import ShiftGroup, ShiftGroupManager
@@ -173,12 +174,16 @@ def create_run(request, shift_id):
 
 def edit_run(request, shift_id, run_id):
     instance = get_object_or_404(Run, id = run_id)
+    print("old user Id " + str(instance.user_id))
+    oldId = instance.user_id
     form = RunForm(request.POST or None, instance=instance)
+    
     shift = get_object_or_404(Shift, pk=shift_id)
     if form.is_valid():
         shift_runs = shift.runs_related.all()
         for s in shift_runs:
             if s.id == form.cleaned_data.get("run.id"):
+                print("new ud" + str(user_id))
                 context = {
                     'user_id': user_id,
                     'form': form,
@@ -187,6 +192,18 @@ def edit_run(request, shift_id, run_id):
                 }
                 return render(request, 'shifts_app/run_update.html', context)
         run = form.save(commit=False)
+        print("new ud" + str(run.user_id))
+        if run.user_id != oldId:
+            print(run.history)
+            if run.history is None:
+                 h2 = His(user_ids = oldId) #delcare a new His with the first element
+                 h2.save()
+                 run.history = h2
+            else:
+                h2 = His(user_ids = str(run.history.user_ids) + "," + str(oldId)) #create a new History
+                h2.save()
+                run.history = h2
+        print(run.history.user_ids)
         run.shift = shift
         run.save()
         return render(request, 'shifts_app/detail.html', {'shift': shift})
@@ -195,6 +212,28 @@ def edit_run(request, shift_id, run_id):
         'form': form,
     }
     return render(request, 'shifts_app/run_update.html', context)
+
+def history_runs(request):
+    result = "<html><link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'><h2>RUN HISTORY PAGE<h2></html>"
+    result += "<br></br>"
+    #ids = []
+    template_name = 'shifts_app/history_runs.html'
+    for shift in Shift.objects.all():
+        shift_runs = shift.runs_related.all() #get all shifts
+        for run in shift_runs:
+            if run.history is not None:
+                #ids += run.id
+                result += "Run ID: "+ str(run.id)
+                result += " Run History: " + run.history.user_ids
+                result += "<br>"
+    context= {
+        'result':result,
+       #'ids':ids
+        }
+    #return render(request, 'shifts_app/history_runs.html', context)
+    return HttpResponse(result)
+    
+
 
 def run_update(request, shift_id,run_id):
     print("inpudate")
