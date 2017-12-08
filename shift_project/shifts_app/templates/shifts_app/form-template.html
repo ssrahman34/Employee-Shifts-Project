@@ -5,7 +5,7 @@
             <span class = "text-danger small"> {{ field.errors }}</span>
         </div>
         <br>
-        {% if field.type == datetime%}
+        {% if forloop.counter != 1%}
         Format Field: YYYY-MM-DD HH:MM
         {% endif %}
         <br>

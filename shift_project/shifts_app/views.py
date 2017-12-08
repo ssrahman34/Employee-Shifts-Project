@@ -183,7 +183,7 @@ def edit_run(request, shift_id, run_id):
                     'user_id': user_id,
                     'form': form,
                     'shift' : shift,
-                    'error_message': 'You already added that song',
+                    'error_message': 'You already added that Run',
                 }
                 return render(request, 'shifts_app/run_update.html', context)
         run = form.save(commit=False)
@@ -246,7 +246,7 @@ def run_update(request, shift_id,run_id):
                     'user_id': user_id,
                     'form': form,
                     'shift' : shift,
-                    'error_message': 'You already added that song',
+                    'error_message': 'You already added that Run',
                 }
                 return render(request, 'shifts_app/run_updateID.html', context)
         run = form.save(commit=False)

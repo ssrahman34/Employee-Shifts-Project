@@ -32,7 +32,7 @@
 <form id = "cover run" method = "POST">
         {% csrf_token %}
 <input type = "text_box" id="RIT" name="RIT">
-<a href = "{% url 'shift:run-update' shift.id run.user_id %}">Change Run</a>
+<!-- <a href = "{% url 'shift:run-update' shift.id run.user_id %}">Change Run</a> -->
 </input>
 <br>
     {% endfor %}
