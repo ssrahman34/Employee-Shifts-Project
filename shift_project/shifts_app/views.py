@@ -158,6 +158,9 @@ def create_run(request, shift_id):
         for s in shift_runs:
             continue
         run = form.save(commit=False)
+        if run.start_datetime.date() < shift.start_datetime.date():
+            message = "<html><link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'><span class = 'text-danger large'><h2 class='text-center'>You cannot create a Run outside the Shift start and end bounds</h2><span></html>"
+            return HttpResponse(message)
         run.shift = shift
         run.save()
         return render(request, 'shifts_app/detail.html', {'shift': shift})
