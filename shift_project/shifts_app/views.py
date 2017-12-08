@@ -1,4 +1,5 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404, redirect
+from django.contrib import messages
 from django.http import HttpResponse
 from django.template import loader
 from django.core.urlresolvers import reverse_lazy
@@ -7,6 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from shifts_app import Shift
 from shifts_app import Run
 from shifts_app.his import His
+
 
 from.forms import RunForm
 from shifts_app.shift_group import ShiftGroup, ShiftGroupManager
@@ -154,14 +156,7 @@ def create_run(request, shift_id):
     if form.is_valid():
         shift_runs = shift.runs_related.all()
         for s in shift_runs:
-            if s.user_id == form.cleaned_data.get("user_id"):
-                context = {
-                    'user_id': user_id,
-                    'form': form,
-                    'shift' : shift,
-                    'error_message': 'You already added that song',
-                }
-                return render(request, 'shifts_app/run_form.html', context)
+            continue
         run = form.save(commit=False)
         run.shift = shift
         run.save()
@@ -203,7 +198,7 @@ def edit_run(request, shift_id, run_id):
                 h2 = His(user_ids = str(run.history.user_ids) + "," + str(oldId)) #create a new History
                 h2.save()
                 run.history = h2
-        print(run.history.user_ids)
+        #print(run.history.user_ids)
         run.shift = shift
         run.save()
         return render(request, 'shifts_app/detail.html', {'shift': shift})
@@ -214,7 +209,9 @@ def edit_run(request, shift_id, run_id):
     return render(request, 'shifts_app/run_update.html', context)
 
 def history_runs(request):
-    result = "<html><link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'><h2>RUN HISTORY PAGE<h2></html>"
+    result = "<html><link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'><h4>USER ID HISTORY PAGE<h4></html>"
+    result += "<br>"
+    result += "<html><h4>Right most number is the most recent User<h4></html>"
     result += "<br></br>"
     #ids = []
     template_name = 'shifts_app/history_runs.html'
@@ -223,8 +220,9 @@ def history_runs(request):
         for run in shift_runs:
             if run.history is not None:
                 #ids += run.id
+                result += "Shift ID: "+ str(shift.id)
                 result += "Run ID: "+ str(run.id)
-                result += " Run History: " + run.history.user_ids
+                result += " User History: " + run.history.user_ids
                 result += "<br>"
     context= {
         'result':result,
@@ -237,43 +235,6 @@ def history_runs(request):
 
 def run_update(request, shift_id,run_id):
     print("inpudate")
-    #form.fields['start_datetime'].widget = forms.HiddenInput()
-    """for shift in Shift.objects.all():
-        shift_runs = shift.runs_related.all()
-        for s in shift_runs:
-            if str(s.user_id) == usr_id:
-                s.user_id = usr_id
-
-                s.shift = shift
-                s.save()
-            else :
-                continue
-    
-    
-    instance = get_object_or_404(Run, id = run_id)
-    form = RunForm(request.POST or None, instance=instance)
-    shift = get_object_or_404(Shift, pk=shift_id)
-    
-    test = request.POST.get('RIT')
-    print(test)
-    #print("usre_" + usr_id)
-    if form.is_valid():
-        shift_runs = shift.runs_related.all()
-        run = shift_runs.get(user_id=int(usr_id)) #get run with correct user_id
-        run.user_id=12 # reassign user ID
-        run = form.save(commit=False)
-        run.user_id=12 # reassign user ID
-        print("usre_hhh")
-        run.shift = shift
-        #shift.save()
-        run.save()
-        
-    context = {
-        
-        'shift':shift, 
-        
-        }
-    return render(request, 'shifts_app/detail.html', context) #go back to runs page"""
     instance = get_object_or_404(Run, id = run_id)
     form = RunForm(request.POST or None, instance=instance)
     shift = get_object_or_404(Shift, pk=shift_id)
@@ -297,6 +258,13 @@ def run_update(request, shift_id,run_id):
         'form': form,
     }
     return render(request, 'shifts_app/run_updateID.html', context)
+
+def run_delete(request,shift_id, run_id):
+    instance = get_object_or_404(Run, id = run_id)
+    instance.delete()
+    messages.success(request, "Successfully Deleted Run")
+    return redirect('shift:index')
+    #return redirect('shift:detail',id=shift_id)
 
 class ShiftUpdate(UpdateView):
     model = Shift 

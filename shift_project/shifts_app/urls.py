@@ -24,6 +24,7 @@ urlpatterns = [
     #run/shift_id/user_id
     url(r'^(?P<shift_id>\d+)/edit/(?P<run_id>[0-9]+)$', views.edit_run, name='edit_run'),
     url(r'run/(?P<shift_id>[0-9]+)/(?P<run_id>[0-9]+)$',views.run_update, name = 'run-update'),
+    url(r'^(?P<shift_id>\d+)/delete/(?P<run_id>[0-9]+)/$',views.run_delete, name = 'run_delete'),
     url(r'^history$', views.history_runs, name='his')
 
 ]

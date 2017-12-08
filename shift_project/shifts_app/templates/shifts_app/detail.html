@@ -28,6 +28,9 @@
           <label role="presentation" class="active">
               <a href = "{% url 'shift:edit_run' shift.id run.id%}" class="active">Edit Run</a>
           </label>
+          <label role="presentation" class="active">
+                <a href = "{% url 'shift:run_delete' shift.id run.id%}" class="active">Delete Run</a>
+            </label>
       </ul>
 <form id = "cover run" method = "POST">
         {% csrf_token %}
