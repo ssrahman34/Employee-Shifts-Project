@@ -185,7 +185,7 @@ def edit_run(request, shift_id, run_id):
                     'shift' : shift,
                     'error_message': 'You already added that song',
                 }
-                return render(request, 'shifts_app/run_form.html', context)
+                return render(request, 'shifts_app/run_update.html', context)
         run = form.save(commit=False)
         run.shift = shift
         run.save()
@@ -194,11 +194,11 @@ def edit_run(request, shift_id, run_id):
         'shift': shift,
         'form': form,
     }
-    return render(request, 'shifts_app/run_form.html', context)
+    return render(request, 'shifts_app/run_update.html', context)
 
-def run_update(request, shift_id,usr_id):
-    #usr_id = request.GET['text_box']
-    print("usre_" + usr_id)
+def run_update(request, shift_id,run_id):
+    print("inpudate")
+    #form.fields['start_datetime'].widget = forms.HiddenInput()
     """for shift in Shift.objects.all():
         shift_runs = shift.runs_related.all()
         for s in shift_runs:
@@ -209,10 +209,10 @@ def run_update(request, shift_id,usr_id):
                 s.save()
             else :
                 continue
-    """
     
-    #instance = get_object_or_404(Run, id = run_id)
-    #form = RunForm(request.POST or None, instance=instance)
+    
+    instance = get_object_or_404(Run, id = run_id)
+    form = RunForm(request.POST or None, instance=instance)
     shift = get_object_or_404(Shift, pk=shift_id)
     
     test = request.POST.get('RIT')
@@ -234,7 +234,30 @@ def run_update(request, shift_id,usr_id):
         'shift':shift, 
         
         }
-    return render(request, 'shifts_app/detail.html', context) #go back to runs page
+    return render(request, 'shifts_app/detail.html', context) #go back to runs page"""
+    instance = get_object_or_404(Run, id = run_id)
+    form = RunForm(request.POST or None, instance=instance)
+    shift = get_object_or_404(Shift, pk=shift_id)
+    if form.is_valid():
+        shift_runs = shift.runs_related.all()
+        for s in shift_runs:
+            if s.id == form.cleaned_data.get("run.id"):
+                context = {
+                    'user_id': user_id,
+                    'form': form,
+                    'shift' : shift,
+                    'error_message': 'You already added that song',
+                }
+                return render(request, 'shifts_app/run_updateID.html', context)
+        run = form.save(commit=False)
+        run.shift = shift
+        run.save()
+        return render(request, 'shifts_app/detail.html', {'shift': shift})
+    context = {
+        'shift': shift,
+        'form': form,
+    }
+    return render(request, 'shifts_app/run_updateID.html', context)
 
 class ShiftUpdate(UpdateView):
     model = Shift 
