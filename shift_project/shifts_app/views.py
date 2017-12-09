@@ -193,10 +193,12 @@ def edit_run(request, shift_id, run_id):
                 }
                 return render(request, 'shifts_app/run_update.html', context)
         run = form.save(commit=False)
-        if run.start_datetime.date() < shift.start_datetime.date():
+        if run.start_datetime.date() < shift.start_datetime.date() or run.end_datetime.date() > shift.end_datetime.date():
             message = "<html><link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'><span class = 'text-danger large'><h2 class='text-center'>You cannot create a Run outside the Shift start and end bounds</h2><span></html>"
             return HttpResponse(message)
-        #print("new ud" + str(run.user_id))
+        if run.start_datetime.time() < shift.start_datetime.time() or run.end_datetime.time() > shift.end_datetime.time():
+            message = "<html><link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'><span class = 'text-danger large'><h2 class='text-center'>You cannot create a Run outside the Shift start and end bounds</h2><span></html>"
+            return HttpResponse(message)
         if run.user_id != oldId:
             print(run.history)
             if run.history is None:
